@@ -12,7 +12,7 @@
 	<artifactId>mulakat</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mulakat</name>
-	<description>Demo project for Spring Boot</description>
+	<description>HBM Project Task</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -31,6 +31,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>2.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 
