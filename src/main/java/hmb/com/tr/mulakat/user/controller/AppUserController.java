@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +42,7 @@ public class AppUserController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
 
 		AppUser user = userRepository.findById(id).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -53,6 +54,20 @@ public class AppUserController {
 					"Delete the todos on the user before deleting the user");
 		}
 		userRepository.delete(user);
+		Map<String, Object> result = new HashMap<>();
+		result.put("success", true);
+		result.put("data", user);
+		result.put("message", "User deleted succesfully.");
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
+
+		AppUser user = userRepository.findById(id).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						"User Not Found"));
 		Map<String, Object> result = new HashMap<>();
 		result.put("success", true);
 		result.put("data", user);

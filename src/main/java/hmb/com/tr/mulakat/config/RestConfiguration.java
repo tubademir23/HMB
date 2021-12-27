@@ -13,6 +13,8 @@ import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import hmb.com.tr.mulakat.user.projection.AppUserProjection;
+
 @Configuration
 public class RestConfiguration implements RepositoryRestConfigurer {
 
@@ -25,6 +27,8 @@ public class RestConfiguration implements RepositoryRestConfigurer {
 		config.setBasePath("/api");
 		config.setRepositoryDetectionStrategy(
 				RepositoryDetectionStrategy.RepositoryDetectionStrategies.VISIBILITY);
+		config.getProjectionConfiguration()
+				.addProjection(AppUserProjection.class);
 		config.exposeIdsFor(entityManager.getMetamodel().getEntities().stream()
 				.map(e -> e.getJavaType()).collect(Collectors.toList())
 				.toArray(new Class[0]));

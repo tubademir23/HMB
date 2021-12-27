@@ -32,12 +32,20 @@ public class AppUser {
 	private Long id;
 	private String name;
 	private String email;
+	private String password;
 	private Gender gender;
 
 	@ManyToOne
 	@EqualsAndHashCode.Exclude
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_STATUS"))
 	private LookupUserStatus status;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@JsonIgnoreProperties({"user"})
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_APP_USER_TODO"))
+	private Set<Todo> todos;
+
 	public Long getId() {
 		return id;
 	}
@@ -69,16 +77,17 @@ public class AppUser {
 		this.status = status;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@EqualsAndHashCode.Exclude
-	@JsonIgnoreProperties({"user"})
-	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_APP_USER_TODO"))
-	private Set<Todo> todos;
 	public Set<Todo> getTodos() {
 		return todos;
 	}
 	public void setTodos(Set<Todo> todos) {
 		this.todos = todos;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
