@@ -1,13 +1,22 @@
 package hmb.com.tr.mulakat.user.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hmb.com.tr.mulakat.lookups.entity.LookupUserStatus;
 import lombok.EqualsAndHashCode;
 
 @Entity
@@ -23,7 +32,10 @@ public class AppUser {
 	private String name;
 	private String email;
 	private String gender;
-	private String status;
+	@ManyToOne
+	@EqualsAndHashCode.Exclude
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_STATUS"))
+	private LookupUserStatus status;
 	public Long getId() {
 		return id;
 	}
@@ -48,11 +60,23 @@ public class AppUser {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public String getStatus() {
+	public LookupUserStatus getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(LookupUserStatus status) {
 		this.status = status;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@JsonIgnoreProperties({"user"})
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_APP_USER_TODO"))
+	private Set<Todo> todos;
+	public Set<Todo> getTodos() {
+		return todos;
+	}
+	public void setTodos(Set<Todo> todos) {
+		this.todos = todos;
 	}
 
 }

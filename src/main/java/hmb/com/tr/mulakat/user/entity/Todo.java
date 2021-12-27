@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hmb.com.tr.mulakat.lookups.entity.LookupTodoStatus;
 import lombok.EqualsAndHashCode;
 
 @Entity
@@ -34,7 +35,10 @@ public class Todo implements Serializable {
 
 	private Date dueOn;
 
-	private String status;
+	@ManyToOne
+	@EqualsAndHashCode.Exclude
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_TODO_STATUS"))
+	private LookupTodoStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@EqualsAndHashCode.Exclude
@@ -65,11 +69,11 @@ public class Todo implements Serializable {
 		this.dueOn = dueOn;
 	}
 
-	public String getStatus() {
+	public LookupTodoStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(LookupTodoStatus status) {
 		this.status = status;
 	}
 
