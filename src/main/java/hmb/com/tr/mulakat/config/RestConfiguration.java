@@ -6,15 +6,12 @@ import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.data.envers.repository.support.EnversRevisionRepositoryFactoryBean;
-//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import hmb.com.tr.mulakat.user.projection.AppUserProjection;
-
 @Configuration
 public class RestConfiguration implements RepositoryRestConfigurer {
 

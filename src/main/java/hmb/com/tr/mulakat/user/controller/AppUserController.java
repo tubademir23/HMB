@@ -16,14 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.querydsl.core.util.StringUtils;
+
+import hmb.com.tr.mulakat.lookups.repository.LookupTodoStatusRepository;
+import hmb.com.tr.mulakat.lookups.repository.LookupUserStatusRepository;
 import hmb.com.tr.mulakat.user.entity.AppUser;
 import hmb.com.tr.mulakat.user.entity.Todo;
+import hmb.com.tr.mulakat.user.events.AppUserEventHandler;
+import hmb.com.tr.mulakat.user.events.TodoEventHandler;
 import hmb.com.tr.mulakat.user.repository.AppUserRepository;
 import hmb.com.tr.mulakat.user.repository.TodoRepository;
 @RestController
@@ -31,14 +38,19 @@ import hmb.com.tr.mulakat.user.repository.TodoRepository;
 public class AppUserController {
 
 	private AppUserRepository userRepository;
-
+	private LookupUserStatusRepository userStatusRepository;
+	private LookupTodoStatusRepository todoStatusRepository;
 	private TodoRepository todoRepository;
 
 	@Autowired
 	public AppUserController(AppUserRepository userRepository,
-			TodoRepository todoRepository) {
+			TodoRepository todoRepository,
+			LookupUserStatusRepository userStatusRepository,
+			LookupTodoStatusRepository todoStatusRepository) {
 		this.userRepository = userRepository;
 		this.todoRepository = todoRepository;
+		this.userStatusRepository = userStatusRepository;
+		this.todoStatusRepository = todoStatusRepository;
 	}
 
 	@DeleteMapping("/{id}")
@@ -75,6 +87,25 @@ public class AppUserController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
+	@Transactional
+	@PostMapping(consumes = "application/json")
+	public ResponseEntity<?> postUser(@RequestBody() AppUser user) {
+		String msg = AppUserEventHandler.handleAppUserBeforeSave(user,
+				userRepository, userStatusRepository);
+		Map<String, Object> result = new HashMap<>();
+		if (!StringUtils.isNullOrEmpty(msg)) {
+			result.put("success", false);
+			result.put("data", null);
+			result.put("message", msg);
+			return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+		}
+		AppUser userCreated = userRepository.save(user);
+		result.put("success", true);
+		result.put("data", userCreated);
+		result.put("message", "User created succesfully.");
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
 
 	/* add todos as array */
 	@Transactional
@@ -100,12 +131,22 @@ public class AppUserController {
 			}
 			Set<Todo> todoSaved = new HashSet<Todo>();
 			if (todos != null) {
-				todos.stream().forEach(item -> {
+				for (Todo item : todos) {
 					item.setUser(user);
+					String msg = TodoEventHandler.handleBeforeSave(item,
+							todoRepository, userRepository,
+							todoStatusRepository);
+					Map<String, Object> result = new HashMap<>();
+					if (!StringUtils.isNullOrEmpty(msg)) {
 
+						result.put("success", false);
+						result.put("data", null);
+						result.put("message", msg);
+						return new ResponseEntity<>(result, HttpStatus.OK);
+					}
 					Todo saved = todoRepository.save(item);
 					todoSaved.add(saved);
-				});
+				} ;
 			}
 			Map<String, Object> result = new HashMap<>();
 			result.put("success", true);
@@ -115,8 +156,8 @@ public class AppUserController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

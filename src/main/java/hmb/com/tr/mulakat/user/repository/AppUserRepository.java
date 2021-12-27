@@ -1,5 +1,7 @@
 package hmb.com.tr.mulakat.user.repository;
 
+import java.util.List;
+
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -27,4 +29,5 @@ public interface AppUserRepository
 		bindings.bind(String.class).first(
 				(SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
 	}
+	List<AppUser> findByEmail(String email);
 }

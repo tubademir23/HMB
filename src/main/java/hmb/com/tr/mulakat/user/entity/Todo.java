@@ -3,6 +3,7 @@ package hmb.com.tr.mulakat.user.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -31,15 +33,20 @@ public class Todo implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+
+	@NotNull
+	@Column(length = 255)
 	private String title;
 
-	private Date dueOn;
+	@NotNull
+	private Date dueOn = new Date();
 
 	@ManyToOne
 	@EqualsAndHashCode.Exclude
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_TODO_STATUS"))
 	private LookupTodoStatus status;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@EqualsAndHashCode.Exclude
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_APP_USER_TODO"))

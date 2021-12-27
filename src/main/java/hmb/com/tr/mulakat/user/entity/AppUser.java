@@ -3,6 +3,7 @@ package hmb.com.tr.mulakat.user.entity;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -30,11 +32,30 @@ public class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	private String name;
-	private String email;
-	private String password;
-	private Gender gender;
 
+	@Column(length = 255)
+	private String name;
+
+	@Column(unique = true, length = 255)
+	private String email;
+
+	private String password;
+
+	private Gender gender;
+	public AppUser() {
+
+	}
+	public AppUser(Long id, String name, String email, String password,
+			Gender gender, LookupUserStatus status, Set<Todo> todos) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.gender = gender;
+		this.status = status;
+		this.todos = todos;
+	}
 	@ManyToOne
 	@EqualsAndHashCode.Exclude
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_STATUS"))
