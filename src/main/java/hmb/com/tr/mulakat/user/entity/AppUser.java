@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import hmb.com.tr.mulakat.enums.Gender;
 import hmb.com.tr.mulakat.lookups.entity.LookupUserStatus;
 import lombok.EqualsAndHashCode;
 
@@ -31,7 +32,8 @@ public class AppUser {
 	private Long id;
 	private String name;
 	private String email;
-	private String gender;
+	private Gender gender;
+
 	@ManyToOne
 	@EqualsAndHashCode.Exclude
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_STATUS"))
@@ -54,10 +56,10 @@ public class AppUser {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getGender() {
+	public Gender getGender() {
 		return gender;
 	}
-	public void setGender(String gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 	public LookupUserStatus getStatus() {

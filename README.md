@@ -13,14 +13,17 @@ Here is sample usages for this library: [QueryDSL](https://www.baeldung.com/rest
 # 📈 RestConfig 
 Resources will be start `/api` and see repositories.
 
-# API Standards
+# API Usages
 * [Lookups](#lookups)
 * [Users](#users)
 * [Todos](#todos)
 
 # 📝 Lookups 
 Status must be defined with table or enum. I prefered database tables and created CrudRepository.
-##Sample usages
+
+<details>
+  <summary>Sample usages</summary>
+
 * GET: List of todostatus:
     * GET /api/todostatus
 * GET by id:
@@ -46,13 +49,11 @@ Status must be defined with table or enum. I prefered database tables and create
   "value" : "NOT PENDING"
 }
 ```
-Get all TODO_STATUS
+</details>
 
-```http
-GET /api/todostatus/
-```
-Get status by id
+# 📝 Users
 
-```http
-GET /api/todostatus/1
-```
+Status must be defined with table or enum. I prefered database tables and created CrudRepository.
+##Sample usages
+
+# 📝 Todos 
