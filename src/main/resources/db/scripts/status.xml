@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2021301201" author="tubademir23" context="init">
+	       <sql>
+	       create table if not exists lookup_todo_status
+			(
+				id integer not null
+					constraint lookup_todo_status_pkey
+						primary key,
+				value varchar(255)
+			);
+	       </sql>
+    </changeSet>
+    <changeSet id="2021301202" author="tubademir23" context="init">
+	        <sql>
+	       create table if not exists lookup_user_status
+			(
+				id integer not null
+					constraint lookup_user_status_pkey
+						primary key,
+				value varchar(255)
+			);
+	       </sql>
+    </changeSet>
+    <changeSet id="2021301203" author="tubademir23" context="init">
+
+        <sql>
+        insert into lookup_todo_status (id, value) values (1, 'Backlog') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (2, 'To Do') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (3, 'In Progress') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (4, 'In Review') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (5, 'Test') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (6, 'Done') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (7, 'To Hold') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (8, 'Cancel') ON CONFLICT DO NOTHING;
+        insert into lookup_todo_status (id, value) values (9, 'Reopen') ON CONFLICT DO NOTHING;
+        
+        insert into lookup_user_status (id, value) values (1, 'Active') ON CONFLICT DO NOTHING;
+        insert into lookup_user_status (id, value) values (2, 'Inactive') ON CONFLICT DO NOTHING;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
