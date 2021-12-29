@@ -31,8 +31,6 @@ public class ContentConfig {
 		bean.setName("querydslHttpRequestContextAwareServletFilter");
 		bean.setUrlPatterns(
 				Arrays.asList(new String[]{"/api/users", "/api/todos"}));
-		// bean.setUrlPatterns(Arrays.asList(new
-		// String[]{"/api/ydkKitapSonuc"}));
 		bean.setOrder(Ordered.LOWEST_PRECEDENCE);
 		return bean;
 	}
