@@ -39,7 +39,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				.collect(Collectors.toList());
 		return new ResponseEntity<>(messages, HttpStatus.BAD_REQUEST);
 	}
-
 	@ExceptionHandler(ResourceNotFoundException.class)
 	protected ResponseEntity<?> handleResourceNotFoundException(
 			ResourceNotFoundException ex) {
@@ -47,14 +46,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				.body("Resource not found");
 	}
 
-	@ExceptionHandler(ConflictException.class)
-	protected ResponseEntity<?> handleConflictException(ConflictException ex) {
-		return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-	}
-
 	@ExceptionHandler(ResponseStatusException.class)
 	protected ResponseEntity<?> handleResponseStatusException(
 			ResponseStatusException ex) {
 		return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+	}
+	@ExceptionHandler(GlobalException.class)
+	protected ResponseEntity<?> handleGlobalException(GlobalException ex) {
+		return new ResponseEntity<>(ex.getDataJson(), HttpStatus.BAD_REQUEST);
 	}
 }
