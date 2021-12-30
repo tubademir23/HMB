@@ -360,4 +360,5 @@ insert into lookup_user_status (id, value) values (2, 'Inactive') ON CONFLICT DO
 </sql>
 </changeSet>
 ```
+
 </details>
