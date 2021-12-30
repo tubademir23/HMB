@@ -8,103 +8,30 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.querydsl.core.util.StringUtils;
-
-import hmb.com.tr.mulakat.lookups.repository.LookupTodoStatusRepository;
-import hmb.com.tr.mulakat.lookups.repository.LookupUserStatusRepository;
 import hmb.com.tr.mulakat.user.entity.AppUser;
 import hmb.com.tr.mulakat.user.entity.Todo;
-import hmb.com.tr.mulakat.user.events.AppUserEventHandler;
-import hmb.com.tr.mulakat.user.events.TodoEventHandler;
 import hmb.com.tr.mulakat.user.repository.AppUserRepository;
 import hmb.com.tr.mulakat.user.repository.TodoRepository;
 @RestController
 @RequestMapping("/api/users")
 public class AppUserController {
-
+	@Autowired
 	private AppUserRepository userRepository;
-	private LookupUserStatusRepository userStatusRepository;
-	private LookupTodoStatusRepository todoStatusRepository;
+	@Autowired
 	private TodoRepository todoRepository;
 
-	@Autowired
-	public AppUserController(AppUserRepository userRepository,
-			TodoRepository todoRepository,
-			LookupUserStatusRepository userStatusRepository,
-			LookupTodoStatusRepository todoStatusRepository) {
-		this.userRepository = userRepository;
-		this.todoRepository = todoRepository;
-		this.userStatusRepository = userStatusRepository;
-		this.todoStatusRepository = todoStatusRepository;
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-
-		AppUser user = userRepository.findById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						"User Not Found"));
-
-		List<Todo> todos = todoRepository.findByUser(user);
-		if (CollectionUtils.isNotEmpty(todos)) {
-			throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY,
-					"Delete the todos on the user before deleting the user");
-		}
-		userRepository.delete(user);
-		Map<String, Object> result = new HashMap<>();
-		result.put("success", true);
-		result.put("data", user);
-		result.put("message", "User deleted succesfully.");
-		return new ResponseEntity<>(result, HttpStatus.OK);
-
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
-
-		AppUser user = userRepository.findById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						"User Not Found"));
-		Map<String, Object> result = new HashMap<>();
-		result.put("success", true);
-		result.put("data", user);
-		result.put("message", "User deleted succesfully.");
-		return new ResponseEntity<>(result, HttpStatus.OK);
-
-	}
-	@Transactional
-	@PostMapping(consumes = "application/json")
-	public ResponseEntity<?> postUser(@RequestBody() AppUser user) {
-		String msg = AppUserEventHandler.handleAppUserBeforeSave(user,
-				userRepository, userStatusRepository);
-		Map<String, Object> result = new HashMap<>();
-		if (!StringUtils.isNullOrEmpty(msg)) {
-			result.put("success", false);
-			result.put("data", null);
-			result.put("message", msg);
-			return new ResponseEntity<>(result, HttpStatus.CONFLICT);
-		}
-		AppUser userCreated = userRepository.save(user);
-		result.put("success", true);
-		result.put("data", userCreated);
-		result.put("message", "User created succesfully.");
-		return new ResponseEntity<>(result, HttpStatus.OK);
-
+	public AppUserController() {
 	}
 
 	/* add todos as array */
@@ -133,17 +60,6 @@ public class AppUserController {
 			if (todos != null) {
 				for (Todo item : todos) {
 					item.setUser(user);
-					String msg = TodoEventHandler.handleBeforeSave(item,
-							todoRepository, userRepository,
-							todoStatusRepository);
-					Map<String, Object> result = new HashMap<>();
-					if (!StringUtils.isNullOrEmpty(msg)) {
-
-						result.put("success", false);
-						result.put("data", null);
-						result.put("message", msg);
-						return new ResponseEntity<>(result, HttpStatus.OK);
-					}
 					Todo saved = todoRepository.save(item);
 					todoSaved.add(saved);
 				} ;

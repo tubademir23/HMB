@@ -2,6 +2,7 @@ package hmb.com.tr.mulakat.user.repository;
 
 import java.util.List;
 
+import org.bitbucket.gt_tech.spring.data.querydsl.value.operators.ExpressionProviderFactory;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -24,11 +25,13 @@ public interface TodoRepository
 			QuerydslBinderCustomizer<QTodo> {
 
 	default void customize(QuerydslBindings bindings, QTodo obj) {
-		// Exclude id from filtering
 		bindings.excluding(obj.id);
 		// Make case-insensitive 'like' filter for all string properties
 		bindings.bind(String.class).first(
 				(SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+
+		bindings.bind(obj.status.id).all((path,
+				value) -> ExpressionProviderFactory.getPredicate(path, value));
 	}
 	List<Todo> findByUser(AppUser user);
 }

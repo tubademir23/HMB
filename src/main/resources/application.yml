@@ -1,13 +1,36 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 1
-    driverClassName: org.postgresql.Driver
-    hikari:
-      connectionTimeout: 20000
-      maximumPoolSize: 5
+  security:
+    filter-order: 3
   jpa:
     hibernate:
       ddl-auto: update
       dialect: org.hibernate.dialect.ProgressDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5433/mulakat
+    username: postgres
+    password: root
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  datasource_heroku:
+    url: jdbc:postgresql://ec2-34-204-127-36.compute-1.amazonaws.com:5432/db08dcb364tvu3
+    username: bdhbcrmkuedkrg
+    password: b291f8680eb5b58d5e2834a242392eb61d2268f5115dec9e298de30ad4f2c375
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  datasource_cloud:
+    url: jdbc:postgresql://castor.db.elephantsql.com:5432/fqiwnyit
+    username: fqiwnyit
+    password: 4zaCiiSIS46dENWrCPfHHZcS20QDKHsp
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  liquibase:
+    change-log: classpath:db/db-init.xml
+    contexts: ${_CONTEXT:prod,test,init}
+security:
+  filter-order: 3

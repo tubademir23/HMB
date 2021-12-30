@@ -20,5 +20,8 @@ public interface AppUserProjection {
 	@Value("#{(target.status != null ? target.status.value : '') }")
 	String getStatusName();
 
+	@Value("#{(target.todos != null ? target.todos.size : 0) }")
+	String getTodoCount();
+
 	Set<Todo> getTodos();
 }
