@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: update
       dialect: org.hibernate.dialect.ProgressDialect
-  datasource:
+  datasource_docker:
     url: jdbc:postgresql://localhost:5433/mulakat
     username: postgres
     password: root
@@ -13,10 +13,10 @@ spring:
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 5
-  datasource_heroku:
-    url: jdbc:postgresql://ec2-34-204-127-36.compute-1.amazonaws.com:5432/db08dcb364tvu3
-    username: bdhbcrmkuedkrg
-    password: b291f8680eb5b58d5e2834a242392eb61d2268f5115dec9e298de30ad4f2c375
+  datasource:
+    url: jdbc:postgresql://ec2-52-70-205-234.compute-1.amazonaws.com:5432/d9a47nqkfdc8m3
+    username: iyvvzmktuweomi
+    password: 2bbd7a1b514d84aba31d58de765dcdbb9c22b1304cc3a85aa4027b46aefb93b3
     driverClassName: org.postgresql.Driver
     hikari:
       connectionTimeout: 20000

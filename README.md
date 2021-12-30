@@ -312,21 +312,41 @@ GET users have email like 23;
  
  ```sh
 git add .
-git commit -m "Added a Procfile."
+git commit -m "Heroku"
 heroku login
 Enter your Heroku credentials.
 ...
-heroku create
-Creating arcane-lowlands-8408... done, stack is heroku-18
-http://arcane-lowlands-8408.herokuapp.com/ | git@heroku.com:arcane-lowlands-8408.git
+heroku create hmbheroku
+Creating ⬢ hmbheroku... done
+https://hmbheroku.herokuapp.com/ | https://git.heroku.com/hmbheroku.git
 Git remote heroku added
+
 git push heroku master
 ...
 -----> Java app detected
 ...
 -----> Launching... done
-       http://arcane-lowlands-8408.herokuapp.com deployed to Heroku
+       https://hmbheroku.herokuapp.com/ deployed to Heroku
+heroku open
  ```
+ 
+ After create heroku [App](https://hmbheroku.herokuapp.com/), let create and connect the database by heroku:
+ 
+ ```sh
+ heroku addons:create heroku-postgresql
+ heroku config 
+ --see the database url, then set application config file.
+ heroku pg
+ ```
+ 
+ Now by passing `https://hmbheroku.herokuapp.com/api`; continue with `/users`, `/todos`,`/todostatus`,`/userstatus` repositories.
+ Be careful about QueryDSL, don't put `/` end of repositories when quering
+ Sample:
+ 
+ ```sh
+ GET https://hmbheroku.herokuapp.com/api/users?todos.status.id=gt(3)
+ ```
+ 
  </details>
 
 # Liquibase
